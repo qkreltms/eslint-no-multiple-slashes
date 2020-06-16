@@ -10,7 +10,7 @@
 
 var rule = require("../../../lib/rules/no-multiple-slashes"),
 
-    RuleTester = require("eslint").RuleTester;
+  RuleTester = require("eslint").RuleTester;
 
 
 //------------------------------------------------------------------------------
@@ -20,22 +20,35 @@ var rule = require("../../../lib/rules/no-multiple-slashes"),
 var ruleTester = new RuleTester();
 ruleTester.run("no-multiple-slashes", rule, {
 
-    valid: [
+  valid: [
+    {
+      code: `// test
+            function foo() {}
+            var bar = foo;`,
+    }
+  ],
 
-        // give me some code that won't trigger a warning
-    ],
-
-    invalid: [
-        {
-            code: `////////////// test can get only comments
+  invalid: [
+    {
+      code: `////////////// test can get only comments
             function foo() {}
             var bar = foo;
-            ///////////////// test mutiple lines
             `,
-            errors: [{
-                message: "Fill me in.",
-                type: "Me too"
-            }]
-        }
-    ]
+      errors: [{
+        message: "multiple slashes는 미관을 해칩니다. 제거해주세요.",
+      }]
+    },
+    {
+      code: `////////////// test can get only comments
+            function foo() {}
+            var bar = foo;
+            /////////////// multiple slashes
+            `,
+      errors: [{
+        message: "multiple slashes는 미관을 해칩니다. 제거해주세요.",
+      }, {
+        message: "multiple slashes는 미관을 해칩니다. 제거해주세요.",
+      }]
+    }
+  ]
 });
